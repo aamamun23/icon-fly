@@ -50,21 +50,21 @@
             </div>
             <div class="input-group f-class">
                 <div>
-                    <label for="">First Class ($150)</label>
-                    <input class="inp-style inp-width" type="number" name="">
+                    <label for="">First Class ($150) : <strong><span id="fcTotalPrice">00</span></strong></label>
+                    <input id="fcQuantity" class="inp-style inp-width" type="number" name="" value="0">
                 </div>
                 <div class="plus-minus-btn">
-                    <p>+ -</p>
+                    <span id="fcPlus">+</span> <span id="fcMinus">-</span>
                 </div>
             </div>
             
             <div class="input-group f-class">
                 <div>
-                    <label for="">Economy ($100)</label>
-                    <input class="inp-style inp-width" type="number" name="">
+                    <label for="">Economy ($100) : <strong><span id="ecTotalPrice">00</span></strong></label>
+                    <input id="ecQuantity" class="inp-style inp-width" type="number" name="" value="0">
                 </div>
                 <div class="plus-minus-btn">
-                    <p> <span>+</span> <span>-</span> </p>
+                    <span id="ecPlus">+</span> <span id="ecMinus">-</span>
                 </div>
             </div>
             <div class="calculations">
@@ -73,7 +73,7 @@
                         <p>Subtotal</p>
                     </div>
                     <div class="right">
-                        <p>$500</p>
+                        <p>$<span id="subTotal">500</span></p>
                     </div>
                 </div>
 
@@ -82,7 +82,7 @@
                         <p>Charge 10% VAT</p>
                     </div>
                     <div class="right">
-                        <p>$50</p>
+                        <p>$<span id="vat">50</span></p>
                     </div>
                 </div>
                 <hr>
@@ -91,7 +91,7 @@
                         <h4>Total</h4>
                     </div>
                     <div class="right">
-                        <p>$550</p>
+                        <p>$<span id="grandTotal">550</span></p>
                     </div>
                 </div>
             </div>
@@ -104,6 +104,81 @@
         </div>
     </section>
 
+    <!-- JavaScript Code  -->
+    <script>
+
+        //First Class Increase
+        document.getElementById("fcPlus").addEventListener("click", function(){
+            calculateIncrease("fcQuantity", 150, "fcTotalPrice");
+        });
+
+        //First Class Increase Function
+        function calculateIncrease(quantity, unitPrice, totalPrice){
+            const ticketQuantity = document.getElementById(quantity);
+            const ticketValue = ticketQuantity.value;
+            const ticketNumber = parseInt(ticketValue);
+            const ticketCount = ticketNumber+1;
+            ticketQuantity.value = ticketCount;
+            const ticketPrice = ticketCount*unitPrice;
+            document.getElementById(totalPrice).innerText = ticketPrice;
+            
+            ticketSubtotalPrice();
+        }
+
+        //First Class Decrease
+        document.getElementById("fcMinus").addEventListener("click", function(){
+            calculateDecrease("fcQuantity", 150, "fcTotalPrice");
+        });
+
+        //First Class Decrease Function
+        function calculateDecrease(quantity, unitPrice, totalPrice){
+            const ticketQuantity = document.getElementById(quantity);
+            const ticketValue = ticketQuantity.value;
+            const ticketNumber = parseInt(ticketValue);
+            let ticketCount;
+            if(ticketNumber>0){
+                ticketCount = ticketNumber-1
+            }else{
+                ticketCount=0;
+            }
+            ticketQuantity.value = ticketCount;
+            
+            const ticketPrice = ticketCount*unitPrice;
+            document.getElementById(totalPrice).innerText = ticketPrice;
+
+            ticketSubtotalPrice();
+        }
+
+        //Economy Class Increase
+        document.getElementById("ecPlus").addEventListener("click", function(){
+            calculateIncrease("ecQuantity", 100, "ecTotalPrice");
+        });
+
+        //Economy Class Decrease
+        document.getElementById("ecMinus").addEventListener("click", function(){
+            calculateDecrease("ecQuantity", 100, "ecTotalPrice");
+        });
+
+
+        function ticketSubtotalPrice(){
+            //FC
+           const fcTotalText = document.getElementById("fcTotalPrice").innerText;
+           const fcTotalNumber = parseInt(fcTotalText);
+
+           //EC
+           const ecTotalText = document.getElementById("ecTotalPrice").innerText;
+           const ecTotalNumber = parseInt(ecTotalText);
+
+           let sum = fcTotalNumber + ecTotalNumber;
+           document.getElementById("subTotal").innerText = sum;
+           const vat = sum*.1;
+           document.getElementById("vat").innerText = vat;
+
+           const grandTotal = sum+vat;
+
+           document.getElementById("grandTotal").innerText = grandTotal;
+        }
+    </script>
     <!--Thank You-->
 </body>
 
